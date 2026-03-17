@@ -1,0 +1,245 @@
+
+
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.8.1
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://e4_user:e4_password_2026@postgres:5432/mobilite_paris
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__WEBSERVER__SECRET_KEY: "e4_secret_key_2026"
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
+    POSTGRES_DB: mobilite_paris
+    POSTGRES_USER: e4_user
+    POSTGRES_PASSWORD: e4_password_2026
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./data/in:/data/in
+  depends_on:
+    postgres:
+      condition: service_healthy
+  networks:
+    - e4_net
+
+services:
+
+  # ─────────────────────────────────────────
+  # BASE DE DONNÉES
+  # ─────────────────────────────────────────
+  postgres:
+    image: postgres:16
+    container_name: e4_postgres
+    environment:
+      POSTGRES_USER: e4_user
+      POSTGRES_PASSWORD: e4_password_2026
+      POSTGRES_DB: mobilite_paris
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U e4_user -d mobilite_paris"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - e4_net
+
+  # ─────────────────────────────────────────
+  # ETL — charge les CSV dans Postgres
+  # ─────────────────────────────────────────
+  etl:
+    build: ./etl
+    container_name: e4_etl
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./data/in:/data/in
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: mobilite_paris
+      POSTGRES_USER: e4_user
+      POSTGRES_PASSWORD: e4_password_2026
+    networks:
+      - e4_net
+
+  # ─────────────────────────────────────────
+  # API FASTAPI
+  # ─────────────────────────────────────────
+  api:
+    build: ./api
+    container_name: e4_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: mobilite_paris
+      POSTGRES_USER: e4_user
+      POSTGRES_PASSWORD: e4_password_2026
+      API_KEY: e4-api-key-mobilite-paris-2026
+    networks:
+      - e4_net
+
+  # ─────────────────────────────────────────
+  # DASHBOARD STREAMLIT
+  # ─────────────────────────────────────────
+  streamlit:
+    build: ./streamlit
+    container_name: e4_streamlit
+    depends_on:
+      - api
+      - postgres
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://api:8000
+      API_KEY: e4-api-key-mobilite-paris-2026
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: mobilite_paris
+      POSTGRES_USER: e4_user
+      POSTGRES_PASSWORD: e4_password_2026
+    networks:
+      - e4_net
+
+  # ─────────────────────────────────────────
+  # AIRFLOW — INIT (crée la BDD + user admin)
+  # ─────────────────────────────────────────
+  airflow_init:
+    <<: *airflow-common
+    container_name: e4_airflow_init
+    command: bash -c "airflow db upgrade && airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@admin.com"
+    restart: "no"
+
+  # ─────────────────────────────────────────
+  # AIRFLOW — WEBSERVER (interface graphique)
+  # ─────────────────────────────────────────
+  airflow_webserver:
+    <<: *airflow-common
+    container_name: e4_airflow_webserver
+    command: webserver
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow_init:
+        condition: service_completed_successfully
+    restart: always
+
+  # ─────────────────────────────────────────
+  # AIRFLOW — SCHEDULER (exécute les DAGs)
+  # ─────────────────────────────────────────
+  airflow_scheduler:
+    <<: *airflow-common
+    container_name: e4_airflow_scheduler
+    command: scheduler
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow_init:
+        condition: service_completed_successfully
+    restart: always
+
+# ─────────────────────────────────────────
+# VOLUMES ET RÉSEAU
+# ─────────────────────────────────────────
+volumes:
+  postgres_data:
+
+networks:
+  e4_net:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
