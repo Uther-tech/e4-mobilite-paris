@@ -1,0 +1,105 @@
+
+// DBML for E4 Mobilité Paris — inferred from Airflow DAGs
+// Paste this into https://dbdiagram.io/new to visualize the schema
+
+Table amenagements_staging {
+  id serial [pk]
+  raw_osm_id text
+  raw_nom text
+  raw_amenagement text
+  raw_cote_amenagement text
+  raw_sens text
+  raw_surface text
+  raw_arrondissement text
+  raw_coronapiste text
+  raw_longueur text
+  raw_source text
+  raw_date_export text
+  raw_geo_point_2d text
+  raw_all jsonb
+}
+
+Table amenagements_cyclables {
+  osm_id text [pk]
+  nom text
+  amenagement text
+  cote_amenagement text
+  sens text
+  surface text
+  arrondissement text
+  coronapiste text
+  longueur numeric
+  source text
+  date_export text
+  geo_point_2d text
+}
+
+Table evenements_staging {
+  id serial [pk]
+  raw_id text
+  raw_event_id text
+  raw_url text
+  raw_titre text
+  raw_description text
+  raw_lieu text
+  raw_adresse text
+  raw_cp text
+  raw_ville text
+  raw_date_debut text
+  raw_date_fin text
+  raw_coordonnees text
+  raw_transport text
+  raw_type_prix text
+  raw_all jsonb
+}
+
+Table evenements_qfap {
+  id text [pk]
+  url text
+  titre text
+  nom_lieu text
+  adresse_lieu text
+  code_postal text
+  ville text
+  date_debut timestamp
+  date_fin timestamp
+  transport text
+  type_prix text
+}
+
+Table velib_stations {
+  station_id text [pk]
+  name text
+  capacity int
+  raw_all jsonb
+}
+
+Table velib_disponibilite {
+  station_id text
+  last_update timestamp
+  available_bikes int
+  available_stands int
+}
+
+Table pipeline_logs {
+  id serial [pk]
+  dag_id text
+  task_id text
+  pipeline_type text
+  etape text
+  statut text
+  nb_lignes int
+  message text
+  duree_ms int
+  created_at timestamp
+}
+
+// Example relationships (adjust if your DB has different FK constraints)
+// amenagements_staging.raw_osm_id -> amenagements_cyclables.osm_id
+Ref: amenagements_staging.raw_osm_id > amenagements_cyclables.osm_id
+
+// evenements_staging.raw_id -> evenements_qfap.id
+Ref: evenements_staging.raw_id > evenements_qfap.id
+
+// velib_disponibilite.station_id -> velib_stations.station_id
+Ref: velib_disponibilite.station_id > velib_stations.station_id
