@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Rapport E4 — Data Mobilité Paris</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -92,107 +93,102 @@ footer strong{color:#80cbc4}
 </style>
 </head>
 <body>
-
 <!-- COUVERTURE -->
 <section class="cover">
-  <div class="cover-badge">📊 Rapport Technique — Bloc E4 Data Engineer</div>
-  <h1>Data Mobilité<br><em>Paris</em></h1>
-  <p class="sub">Pipeline de données open source pour l'analyse de la mobilité douce parisienne — Vélib', pistes cyclables et événements culturels</p>
-  <div class="cover-kpis">
-    <div class="kpi"><span class="kpi-val">1 510</span><span class="kpi-lbl">Stations Vélib'</span></div>
-    <div class="kpi"><span class="kpi-val">17 138</span><span class="kpi-lbl">Vélos disponibles</span></div>
-    <div class="kpi"><span class="kpi-val">18 170</span><span class="kpi-lbl">Aménagements cyclables</span></div>
-    <div class="kpi"><span class="kpi-val">6</span><span class="kpi-lbl">DAGs Airflow</span></div>
-    <div class="kpi"><span class="kpi-val">7</span><span class="kpi-lbl">Services Docker</span></div>
-  </div>
-  <span class="cover-date">Mars 2026 — E4 Data Engineering</span>
+<div class="cover-badge">📊 Rapport E4:Mise en Situation Professionnelle</div>
+<h1>Data Mobilité<br/><em>Paris</em></h1>
+<p class="sub">Pipeline de données open source pour l'analyse de la mobilité douce parisienne — Vélib', pistes cyclables et événements culturels</p>
+<div class="cover-kpis">
+<div class="kpi"><span class="kpi-val">1 510</span><span class="kpi-lbl">Stations Vélib'</span></div>
+<div class="kpi"><span class="kpi-val">17 138</span><span class="kpi-lbl">Vélos disponibles</span></div>
+<div class="kpi"><span class="kpi-val">18 170</span><span class="kpi-lbl">Aménagements cyclables</span></div>
+<div class="kpi"><span class="kpi-val">6</span><span class="kpi-lbl">DAGs Airflow</span></div>
+<div class="kpi"><span class="kpi-val">7</span><span class="kpi-lbl">Services Docker</span></div>
+</div>
+<span class="cover-date">Mars 2026 — E4 Data Engineering</span>
 </section>
-
 <div class="page-body">
 <nav class="toc">
-  <div class="toc-title">📋 Sommaire</div>
-  <a href="#contexte">🎯 1. Contexte</a>
-  <a href="#archi">🏗️ 2. Architecture</a>
-  <div class="toc-sep"></div>
-  <a href="#sources">📥 3. Sources de données</a>
-  <a href="#velib">🚲 4. Vélib'</a>
-  <a href="#cyclable">🛣️ 5. Aménagements cyclables</a>
-  <a href="#evenements">🎭 6. Événements QFAP</a>
-  <div class="toc-sep"></div>
-  <a href="#etl">⚙️ 7. Service ETL</a>
-  <a href="#airflow">🔄 8. Airflow DAGs</a>
-  <a href="#bdd">🗄️ 9. Base de données</a>
-  <div class="toc-sep"></div>
-  <a href="#api">🌐 10. API FastAPI</a>
-  <a href="#dashboard">📊 11. Dashboard Streamlit</a>
-  <a href="#qualite">✅ 12. Qualité des données</a>
-  <div class="toc-sep"></div>
-  <a href="#rgpd">🔒 13. RGPD</a>
-  <a href="#conclusion">📌 14. Conclusion</a>
+<div class="toc-title"> Sommaire</div>
+<a href="#contexte"> 1. Contexte</a>
+<a href="#archi"> 2. Architecture</a>
+<div class="toc-sep"></div>
+<a href="#sources"> 3. Sources de données</a>
+<a href="#velib"> 4. Vélib'</a>
+<a href="#cyclable"> 5. Aménagements cyclables</a>
+<a href="#evenements"> 6. Événements QFAP</a>
+<div class="toc-sep"></div>
+<a href="#etl"> 7. Service ETL</a>
+<a href="#airflow"> 8. Airflow DAGs</a>
+<a href="#bdd"> 9. Base de données</a>
+<div class="toc-sep"></div>
+<a href="#api"> 10. API FastAPI</a>
+<a href="#dashboard"> 11. Dashboard Streamlit</a>
+<a href="#qualite"> 12. Qualité des données</a>
+<div class="toc-sep"></div>
+<a href="#rgpd"> 13. RGPD</a>
+<a href="#conclusion"> 14. Conclusion</a>
 </nav>
 <main class="content">
-
 <!-- SECTION 1 : CONTEXTE -->
 <section class="section" id="contexte">
-  <div class="section-header">
-    <div class="section-icon icon-blue">🎯</div>
-    <div><h2>Contexte &amp; Objectifs</h2><p>Périmètre du projet E4 Data Engineer</p></div>
-  </div>
-  <div class="card">
-    <h3>Présentation générale</h3>
-    <p>Le projet <strong>E4 Data Mobilité Paris</strong> vise à construire un pipeline de données end-to-end autour de la mobilité douce parisienne. Il intègre des données open data, les orchestre via <strong>Apache Airflow 2.8.1</strong>, les stocke dans <strong>PostgreSQL 16</strong> et les expose via une <strong>API FastAPI</strong> et un <strong>dashboard Streamlit</strong>, le tout déployé via <strong>Docker Compose</strong>.</p>
-    <h4>Périmètre fonctionnel</h4>
-    <ul>
-      <li>Suivi en temps réel de la disponibilité des 1 510 stations Vélib' (rafraîchissement horaire)</li>
-      <li>Cartographie de 18 170 aménagements cyclables parisiens</li>
-      <li>Catalogue des événements culturels parisiens via le portail QFAP</li>
-      <li>Contrôle qualité automatisé quotidien — 4 contrôles + rapport consolidé</li>
-      <li>Statistiques consolidées quotidiennes — 3 domaines + rapport global</li>
-      <li>API REST sécurisée avec documentation Swagger auto-générée</li>
-      <li>Dashboard interactif avec cartes géolocalisées et graphiques</li>
-    </ul>
-    <h4>Stack technique</h4>
-    <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.5rem">
-      <span class="badge badge-blue">Apache Airflow 2.8.1</span>
-      <span class="badge badge-teal">PostgreSQL 16</span>
-      <span class="badge badge-green">FastAPI</span>
-      <span class="badge badge-orange">Streamlit</span>
-      <span class="badge badge-purple">Docker Compose v2</span>
-      <span class="badge badge-blue">Python 3.x</span>
-      <span class="badge badge-teal">pandas</span>
-      <span class="badge badge-blue">psycopg2</span>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Tableau de bord des KPIs projet</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Indicateur</th><th>Valeur</th><th>Statut</th></tr></thead>
-        <tbody>
-          <tr><td>Stations Vélib' chargées</td><td>1 510</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td>Vélos disponibles (snapshot)</td><td>17 138</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td>Aménagements cyclables</td><td>18 170</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td>DAGs Airflow déployés</td><td>6 / 6</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td>Services Docker actifs</td><td>7 / 7</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td>Contrôles qualité passés</td><td>4 / 4</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td>Endpoints API documentés</td><td>7</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-blue">1</div>
+<div><h2>Contexte &amp; Objectifs</h2><p>Périmètre du projet E4 Data Mobilité Paris</p></div>
+</div>
+<div class="card">
+<h3>Présentation générale</h3>
+<p>Le projet <strong>E4 Data Mobilité Paris</strong> vise à construire un pipeline de données end-to-end autour de la mobilité douce parisienne. Il intègre des données open data, les orchestre via <strong>Apache Airflow 2.8.1</strong>, les stocke dans <strong>PostgreSQL 16</strong> et les expose via une <strong>API FastAPI</strong> et un <strong>dashboard Streamlit</strong>, le tout déployé via <strong>Docker Compose</strong>.</p>
+<h4>Périmètre fonctionnel</h4>
+<ul>
+<li>Suivi en temps réel de la disponibilité des 1 510 stations Vélib' (rafraîchissement horaire)</li>
+<li>Cartographie de 18 170 aménagements cyclables parisiens</li>
+<li>Catalogue des événements culturels parisiens via le portail QFAP</li>
+<li>Contrôle qualité automatisé quotidien — 4 contrôles + rapport consolidé</li>
+<li>Statistiques consolidées quotidiennes — 3 domaines + rapport global</li>
+<li>API REST sécurisée avec documentation Swagger auto-générée</li>
+<li>Dashboard interactif avec cartes géolocalisées et graphiques</li>
+</ul>
+<h4>Stack technique</h4>
+<div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.5rem">
+<span class="badge badge-blue">Apache Airflow 2.8.1</span>
+<span class="badge badge-teal">PostgreSQL 16</span>
+<span class="badge badge-green">FastAPI</span>
+<span class="badge badge-orange">Streamlit</span>
+<span class="badge badge-purple">Docker Compose v2</span>
+<span class="badge badge-blue">Python 3.x</span>
+<span class="badge badge-teal">pandas</span>
+<span class="badge badge-blue">psycopg2</span>
+</div>
+</div>
+<div class="card">
+<h3>Tableau de bord des KPIs projet</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Indicateur</th><th>Valeur</th><th>Statut</th></tr></thead>
+<tbody>
+<tr><td>Stations Vélib' chargées</td><td>1 510</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td>Vélos disponibles (snapshot)</td><td>17 138</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td>Aménagements cyclables</td><td>18 170</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td>DAGs Airflow déployés</td><td>6 / 6</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td>Services Docker actifs</td><td>7 / 7</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td>Contrôles qualité passés</td><td>4 / 4</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td>Endpoints API documentés</td><td>7</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 2 : ARCHITECTURE -->
 <section class="section" id="archi">
-  <div class="section-header">
-    <div class="section-icon icon-teal">🏗️</div>
-    <div><h2>Architecture technique</h2><p>Stack Docker Compose — 7 services sur réseau e4_net</p></div>
-  </div>
-  <div class="card">
-    <h3>Schéma d'architecture globale</h3>
-    <pre>
+<div class="section-header">
+<div class="section-icon icon-teal">2</div>
+<div><h2>Architecture technique</h2><p>Stack Docker Compose — 7 services sur réseau e4_net</p></div>
+</div>
+<div class="card">
+<h3>Schéma d'architecture globale</h3>
+<pre>
 Open Data Paris / JCDecaux / OpenStreetMap
           │
           ▼
@@ -219,28 +215,28 @@ e4_etl (Python ETL)              e4_airflow_scheduler (6 DAGs)
     e4_airflow_webserver:8081
     Interface graphique Airflow UI
     </pre>
-  </div>
-  <div class="card">
-    <h3>Services Docker Compose — détail</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Service</th><th>Container</th><th>Port</th><th>Rôle</th><th>Dépend de</th></tr></thead>
-        <tbody>
-          <tr><td><code>postgres</code></td><td>e4_postgres</td><td>5433:5432</td><td>PostgreSQL 16 — stockage principal</td><td>—</td></tr>
-          <tr><td><code>etl</code></td><td>e4_etl</td><td>—</td><td>Chargement initial des 4 CSV</td><td>postgres healthy</td></tr>
-          <tr><td><code>api</code></td><td>e4_api</td><td>8000:8000</td><td>API REST FastAPI sécurisée</td><td>postgres healthy</td></tr>
-          <tr><td><code>streamlit</code></td><td>e4_streamlit</td><td>8501:8501</td><td>Dashboard interactif Streamlit</td><td>api + postgres</td></tr>
-          <tr><td><code>airflow_init</code></td><td>e4_airflow_init</td><td>—</td><td>Init BDD Airflow + user admin</td><td>postgres healthy</td></tr>
-          <tr><td><code>airflow_webserver</code></td><td>e4_airflow_webserver</td><td>8081:8080</td><td>Interface graphique Airflow</td><td>airflow_init done</td></tr>
-          <tr><td><code>airflow_scheduler</code></td><td>e4_airflow_scheduler</td><td>—</td><td>Exécution des 6 DAGs planifiés</td><td>airflow_init done</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="alert alert-info">💡 Tous les services communiquent sur le réseau bridge <code>e4_net</code>. PostgreSQL est joignable en interne sur <code>postgres:5432</code> et en externe sur <code>localhost:5433</code>. Le volume <code>postgres_data</code> persiste les données entre redémarrages.</div>
-  </div>
-  <div class="card">
-    <h3>Variables d'environnement (.env)</h3>
-    <pre>POSTGRES_HOST=postgres
+</div>
+<div class="card">
+<h3>Services Docker Compose — détail</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Service</th><th>Container</th><th>Port</th><th>Rôle</th><th>Dépend de</th></tr></thead>
+<tbody>
+<tr><td><code>postgres</code></td><td>e4_postgres</td><td>5433:5432</td><td>PostgreSQL 16 — stockage principal</td><td>—</td></tr>
+<tr><td><code>etl</code></td><td>e4_etl</td><td>—</td><td>Chargement initial des 4 CSV</td><td>postgres healthy</td></tr>
+<tr><td><code>api</code></td><td>e4_api</td><td>8000:8000</td><td>API REST FastAPI sécurisée</td><td>postgres healthy</td></tr>
+<tr><td><code>streamlit</code></td><td>e4_streamlit</td><td>8501:8501</td><td>Dashboard interactif Streamlit</td><td>api + postgres</td></tr>
+<tr><td><code>airflow_init</code></td><td>e4_airflow_init</td><td>—</td><td>Init BDD Airflow + user admin</td><td>postgres healthy</td></tr>
+<tr><td><code>airflow_webserver</code></td><td>e4_airflow_webserver</td><td>8081:8080</td><td>Interface graphique Airflow</td><td>airflow_init done</td></tr>
+<tr><td><code>airflow_scheduler</code></td><td>e4_airflow_scheduler</td><td>—</td><td>Exécution des 6 DAGs planifiés</td><td>airflow_init done</td></tr>
+</tbody>
+</table>
+</div>
+<div class="alert alert-info">💡 Tous les services communiquent sur le réseau bridge <code>e4_net</code>. PostgreSQL est joignable en interne sur <code>postgres:5432</code> et en externe sur <code>localhost:5433</code>. Le volume <code>postgres_data</code> persiste les données entre redémarrages.</div>
+</div>
+<div class="card">
+<h3>Variables d'environnement (.env)</h3>
+<pre>POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 POSTGRES_DB=mobilite_paris
 POSTGRES_USER=e4_user
@@ -248,11 +244,11 @@ POSTGRES_PASSWORD=e4_password_2026
 API_KEY=e4-api-key-mobilite-paris-2026
 AIRFLOW__WEBSERVER__SECRET_KEY=e4_secret_key_2026
 API_BASE_URL=http://api:8000</pre>
-    <div class="alert alert-warn">⚠️ Le fichier <code>.env</code> est listé dans <code>.gitignore</code> — il ne doit jamais être commité dans Git.</div>
-  </div>
-  <div class="card">
-    <h3>Structure du projet</h3>
-    <pre>e4-data-mobilite-paris/
+<div class="alert alert-warn">⚠️ Le fichier <code>.env</code> est listé dans <code>.gitignore</code> — il ne doit jamais être commité dans Git.</div>
+</div>
+<div class="card">
+<h3>Structure du projet</h3>
+<pre>e4-data-mobilite-paris/
 ├── docker-compose.yml
 ├── .env
 ├── sql/
@@ -282,237 +278,266 @@ API_BASE_URL=http://api:8000</pre>
     ├── elt_evenements_pipeline.py
     ├── dag_qualite_pipeline.py
     └── stats_quotidiennes.py</pre>
-  </div>
+</div>
 </section>
-
+<section id="depot-git">
+<h2>Dépôt Git (scripts &amp; configuration)</h2>
+<p><strong>Dépôt Git (scripts &amp; configuration)</strong> : le code source du projet (ETL, DAGs Airflow, SQL, API FastAPI, dashboard Streamlit et Docker Compose) est disponible à l’adresse suivante :
+  <a href="https://github.com/Uther-tech/e4-mobilite-paris" rel="noopener" target="_blank">https://github.com/Uther-tech/e4-mobilite-paris</a>.
+  <br/>Les secrets sont externalisés dans un fichier <code>.env</code> non versionné (présent dans <code>.gitignore</code>). Un fichier <code>.env.example</code> permet de rejouer le projet.</p>
+</section>
 <div class="divider"></div>
-
 <!-- SECTION 3 : SOURCES DE DONNÉES -->
 <section class="section" id="sources">
-  <div class="section-header">
-    <div class="section-icon icon-orange">📥</div>
-    <div><h2>Sources de données</h2><p>4 sources open data — Mairie de Paris / OpenStreetMap</p></div>
-  </div>
-  <div class="card">
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Source</th><th>Fichier CSV</th><th>Lignes</th><th>Fréquence</th><th>Licence</th></tr></thead>
-        <tbody>
-          <tr>
-            <td>🚲 Vélib' Stations</td>
-            <td><code>velib-emplacement-des-stations.csv</code></td>
-            <td>1 510</td><td>ETL ponctuel</td>
-            <td><span class="badge badge-green">Etalab v2.0</span></td>
-          </tr>
-          <tr>
-            <td>🚲 Vélib' Disponibilité</td>
-            <td><code>velib-disponibilite-en-temps-reel.csv</code></td>
-            <td>1 510</td><td>⏱️ Horaire</td>
-            <td><span class="badge badge-green">Etalab v2.0</span></td>
-          </tr>
-          <tr>
-            <td>🛣️ Aménagements cyclables</td>
-            <td><code>amenagements-cyclables.csv</code></td>
-            <td>18 170</td><td>Quotidienne 06h30</td>
-            <td><span class="badge badge-teal">ODbL 1.0</span></td>
-          </tr>
-          <tr>
-            <td>🎭 Événements QFAP</td>
-            <td><code>que-faire-a-paris.csv</code></td>
-            <td>Variable</td><td>Quotidienne 06h00</td>
-            <td><span class="badge badge-green">Etalab v2.0</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-orange">3</div>
+<div><h2>Sources de données</h2><p>4 sources open data — Mairie de Paris / OpenStreetMap</p></div>
+</div>
+<div class="card">
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Source</th><th>Fichier CSV</th><th>Lignes</th><th>Fréquence</th><th>Licence</th></tr></thead>
+<tbody>
+<tr>
+<td>🚲 Vélib' Stations</td>
+<td><code>velib-emplacement-des-stations.csv</code></td>
+<td>1 510</td><td>ETL ponctuel</td>
+<td><span class="badge badge-green">Etalab v2.0</span></td>
+</tr>
+<tr>
+<td>🚲 Vélib' Disponibilité</td>
+<td><code>velib-disponibilite-en-temps-reel.csv</code></td>
+<td>1 510</td><td>⏱️ Horaire</td>
+<td><span class="badge badge-green">Etalab v2.0</span></td>
+</tr>
+<tr>
+<td>🛣️ Aménagements cyclables</td>
+<td><code>amenagements-cyclables.csv</code></td>
+<td>18 170</td><td>Quotidienne 06h30</td>
+<td><span class="badge badge-teal">ODbL 1.0</span></td>
+</tr>
+<tr>
+<td>🎭 Événements QFAP</td>
+<td><code>que-faire-a-paris.csv</code></td>
+<td>Variable</td><td>Quotidienne 06h00</td>
+<td><span class="badge badge-green">Etalab v2.0</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>URLs d’export (OpenDataSoft) — jeux de données sources</h3>
+<table class="table">
+<thead><tr><th>Jeu de données</th><th>URL export</th><th>Fréquence</th><th>Format</th></tr></thead>
+<tbody>
+<tr>
+<td>Vélib — disponibilité en temps réel</td>
+<td><a href="https://opendata.paris.fr/explore/dataset/velib-disponibilite-en-temps-reel/export/?disjunctive.is_renting&amp;disjunctive.is_installed&amp;disjunctive.is_returning&amp;disjunctive.name&amp;disjunctive.nom_arrondissement_communes" rel="noopener" target="_blank">Lien export</a></td>
+<td>Horaire (DAG <code>velib_refresh_horaire</code>)</td>
+<td>CSV</td>
+</tr>
+<tr>
+<td>Vélib — emplacement des stations</td>
+<td><a href="https://opendata.paris.fr/explore/dataset/velib-emplacement-des-stations/export/" rel="noopener" target="_blank">Lien export</a></td>
+<td>Ponctuelle / référentiel</td>
+<td>CSV</td>
+</tr>
+<tr>
+<td>Aménagements cyclables (extraction OSM publiée par la Ville de Paris)</td>
+<td><a href="https://opendata.paris.fr/explore/dataset/amenagements-cyclables/export/?disjunctive.amenagement&amp;disjunctive.arrondissement&amp;disjunctive.position_amenagement&amp;disjunctive.vitesse_maximale_autorisee&amp;disjunctive.source" rel="noopener" target="_blank">Lien export</a></td>
+<td>Quotidienne (06h30 UTC)</td>
+<td>CSV</td>
+</tr>
+<tr>
+<td>Que Faire à Paris (QFAP) — événements</td>
+<td><a href="https://opendata.paris.fr/explore/dataset/que-faire-a-paris-/export/?disjunctive.access_type&amp;disjunctive.price_type&amp;disjunctive.deaf&amp;disjunctive.blind&amp;disjunctive.pmr&amp;disjunctive.address_city&amp;disjunctive.address_zipcode&amp;disjunctive.address_name&amp;disjunctive.programs" rel="noopener" target="_blank">Lien export</a></td>
+<td>Quotidienne</td>
+<td>CSV</td>
+</tr>
+</tbody>
+</table>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 4 : VÉLIB' -->
 <section class="section" id="velib">
-  <div class="section-header">
-    <div class="section-icon icon-blue">🚲</div>
-    <div><h2>Vélib' — Stations &amp; Disponibilité</h2><p>JCDecaux / Open Data Paris — Licence Ouverte Etalab v2.0</p></div>
-  </div>
-  <div class="kpi-row">
-    <div class="kpi-card"><span class="val col-blue">1 510</span><span class="lbl">Stations actives</span></div>
-    <div class="kpi-card"><span class="val col-teal">17 138</span><span class="lbl">Vélos disponibles</span></div>
-    <div class="kpi-card"><span class="val col-orange">6 767</span><span class="lbl">Vélos électriques</span></div>
-    <div class="kpi-card"><span class="val col-blue">10 371</span><span class="lbl">Vélos mécaniques</span></div>
-    <div class="kpi-card"><span class="val col-green">25 383</span><span class="lbl">Bornettes libres</span></div>
-  </div>
-  <div class="card">
-    <h3>Table velib_stations — champs principaux</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>station_id</code></td><td>INTEGER PK</td><td>Identifiant unique de la station</td></tr>
-          <tr><td><code>nom_station</code></td><td>VARCHAR(200)</td><td>Nom de la station</td></tr>
-          <tr><td><code>capacite</code></td><td>INTEGER</td><td>Nombre de bornettes total</td></tr>
-          <tr><td><code>latitude</code></td><td>FLOAT</td><td>Coordonnée géographique N/S</td></tr>
-          <tr><td><code>longitude</code></td><td>FLOAT</td><td>Coordonnée géographique E/W</td></tr>
-          <tr><td><code>arrondissement</code></td><td>VARCHAR(10)</td><td>Arrondissement parisien (ex: "11")</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Table velib_disponibilite — champs principaux</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>station_id</code></td><td>INTEGER FK</td><td>Référence vers velib_stations</td></tr>
-          <tr><td><code>nb_velos_disponibles</code></td><td>INTEGER</td><td>Total vélos disponibles</td></tr>
-          <tr><td><code>velos_mecaniques</code></td><td>INTEGER</td><td>Vélos mécaniques disponibles</td></tr>
-          <tr><td><code>velos_electriques</code></td><td>INTEGER</td><td>Vélos électriques disponibles</td></tr>
-          <tr><td><code>nb_bornettes_libres</code></td><td>INTEGER</td><td>Places pour déposer un vélo</td></tr>
-          <tr><td><code>actualisation_donnees</code></td><td>TIMESTAMP</td><td>Horodatage du dernier refresh</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Répartition mécanique / électrique</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Type de vélo</th><th>Nombre</th><th>Pourcentage</th></tr></thead>
-        <tbody>
-          <tr><td>🔧 Mécaniques</td><td>10 371</td><td>60,5 %</td></tr>
-          <tr><td>⚡ Électriques</td><td>6 767</td><td>39,5 %</td></tr>
-          <tr><td><strong>Total</strong></td><td><strong>17 138</strong></td><td><strong>100 %</strong></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Stratégie de collecte horaire</h3>
-    <p>La disponibilité est rafraîchie <strong>toutes les heures</strong> par le DAG <code>velib_refresh_horaire</code>. Stratégie TRUNCATE + INSERT : la table est entièrement remplacée à chaque exécution pour garantir des données toujours fraîches.</p>
-    <div class="pipeline">
-      <span class="pipe-step">fetch_and_update_velib</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step teal">TRUNCATE velib_disponibilite</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">INSERT 1 510 lignes</span>
-    </div>
-    <div class="alert alert-success">✅ Exécutions continues validées : 13/03/2026 13h00 → 14/03/2026 15h00 — 26 runs consécutifs sans échec.</div>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-blue">4</div>
+<div><h2>Vélib' — Stations &amp; Disponibilité</h2><p>JCDecaux / Open Data Paris — Licence Ouverte Etalab v2.0</p></div>
+</div>
+<div class="kpi-row">
+<div class="kpi-card"><span class="val col-blue">1 510</span><span class="lbl">Stations actives</span></div>
+<div class="kpi-card"><span class="val col-teal">17 138</span><span class="lbl">Vélos disponibles</span></div>
+<div class="kpi-card"><span class="val col-orange">6 767</span><span class="lbl">Vélos électriques</span></div>
+<div class="kpi-card"><span class="val col-blue">10 371</span><span class="lbl">Vélos mécaniques</span></div>
+<div class="kpi-card"><span class="val col-green">25 383</span><span class="lbl">Bornettes libres</span></div>
+</div>
+<div class="card">
+<h3>Table velib_stations — champs principaux</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>station_id</code></td><td>INTEGER PK</td><td>Identifiant unique de la station</td></tr>
+<tr><td><code>nom_station</code></td><td>VARCHAR(200)</td><td>Nom de la station</td></tr>
+<tr><td><code>capacite</code></td><td>INTEGER</td><td>Nombre de bornettes total</td></tr>
+<tr><td><code>latitude</code></td><td>FLOAT</td><td>Coordonnée géographique N/S</td></tr>
+<tr><td><code>longitude</code></td><td>FLOAT</td><td>Coordonnée géographique E/W</td></tr>
+<tr><td><code>arrondissement</code></td><td>VARCHAR(10)</td><td>Arrondissement parisien (ex: "11")</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Table velib_disponibilite — champs principaux</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>station_id</code></td><td>INTEGER FK</td><td>Référence vers velib_stations</td></tr>
+<tr><td><code>nb_velos_disponibles</code></td><td>INTEGER</td><td>Total vélos disponibles</td></tr>
+<tr><td><code>velos_mecaniques</code></td><td>INTEGER</td><td>Vélos mécaniques disponibles</td></tr>
+<tr><td><code>velos_electriques</code></td><td>INTEGER</td><td>Vélos électriques disponibles</td></tr>
+<tr><td><code>nb_bornettes_libres</code></td><td>INTEGER</td><td>Places pour déposer un vélo</td></tr>
+<tr><td><code>actualisation_donnees</code></td><td>TIMESTAMP</td><td>Horodatage du dernier refresh</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Répartition mécanique / électrique</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Type de vélo</th><th>Nombre</th><th>Pourcentage</th></tr></thead>
+<tbody>
+<tr><td>🔧 Mécaniques</td><td>10 371</td><td>60,5 %</td></tr>
+<tr><td>⚡ Électriques</td><td>6 767</td><td>39,5 %</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>17 138</strong></td><td><strong>100 %</strong></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Stratégie de collecte horaire</h3>
+<p>La disponibilité est rafraîchie <strong>toutes les heures</strong> par le DAG <code>velib_refresh_horaire</code>. Stratégie TRUNCATE + INSERT : la table est entièrement remplacée à chaque exécution pour garantir des données toujours fraîches.</p>
+<div class="pipeline">
+<span class="pipe-step">fetch_and_update_velib</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step teal">TRUNCATE velib_disponibilite</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">INSERT 1 510 lignes</span>
+</div>
+<div class="alert alert-success">✅ Exécutions continues validées : 13/03/2026 13h00 → 14/03/2026 15h00 — 26 runs consécutifs sans échec.</div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 5 : CYCLABLE -->
 <section class="section" id="cyclable">
-  <div class="section-header">
-    <div class="section-icon icon-green">🛣️</div>
-    <div><h2>Aménagements cyclables</h2><p>OpenStreetMap / Open Data Paris — ODbL 1.0</p></div>
-  </div>
-  <div class="kpi-row">
-    <div class="kpi-card"><span class="val col-green">18 170</span><span class="lbl">Tronçons</span></div>
-    <div class="kpi-card"><span class="val col-teal">20</span><span class="lbl">Arrondissements</span></div>
-    <div class="kpi-card"><span class="val col-blue">8</span><span class="lbl">Types d'aménagement</span></div>
-    <div class="kpi-card"><span class="val col-orange">1 643 km</span><span class="lbl">Longueur totale estimée</span></div>
-  </div>
-  <div class="card">
-    <h3>Types d'aménagements recensés</h3>
-    <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.8rem">
-      <span class="badge badge-green">Piste cyclable</span>
-      <span class="badge badge-blue">Bande cyclable</span>
-      <span class="badge badge-teal">Coronapiste</span>
-      <span class="badge badge-orange">Voie verte</span>
-      <span class="badge badge-purple">Zone de rencontre</span>
-      <span class="badge badge-teal">Contra-sens cyclable</span>
-      <span class="badge badge-blue">Couloir bus + vélos</span>
-      <span class="badge badge-orange">Chemin cyclable</span>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Table amenagements_cyclables — champs principaux</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>osm_id</code></td><td>VARCHAR(50) PK</td><td>Identifiant OpenStreetMap unique</td></tr>
-          <tr><td><code>nom</code></td><td>VARCHAR(300)</td><td>Nom du tronçon ou de la voie</td></tr>
-          <tr><td><code>amenagement</code></td><td>VARCHAR(100)</td><td>Type d'aménagement cyclable</td></tr>
-          <tr><td><code>arrondissement</code></td><td>VARCHAR(10)</td><td>Arrondissement (1 à 20)</td></tr>
-          <tr><td><code>longueur</code></td><td>FLOAT</td><td>Longueur du tronçon en mètres</td></tr>
-          <tr><td><code>sens</code></td><td>VARCHAR(50)</td><td>Sens de circulation (double/simple)</td></tr>
-          <tr><td><code>surface</code></td><td>VARCHAR(50)</td><td>Type de surface (bitume, pavés...)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Pipeline ELT — quotidien 06h30 UTC</h3>
-    <p>Contrairement au pattern ETL classique, la transformation est réalisée <strong>directement en base SQL</strong> après chargement en staging. Ce pattern ELT exploite la puissance de PostgreSQL.</p>
-    <div class="pipeline">
-      <span class="pipe-step">extract_load_staging</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step orange">quality_check</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">transform_in_db</span>
-    </div>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-green">5</div>
+<div><h2>Aménagements cyclables</h2>
+<p><strong>Origine :</strong> données issues d’OpenStreetMap (OSM) publiées via le portail Open Data Paris, avec contrôle qualité/validation par la Mission Vélo (outil « LeBonTag »).</p><p>OpenStreetMap / Open Data Paris — ODbL 1.0</p></div>
+</div>
+<div class="kpi-row">
+<div class="kpi-card"><span class="val col-green">18 170</span><span class="lbl">Tronçons</span></div>
+<div class="kpi-card"><span class="val col-teal">20</span><span class="lbl">Arrondissements</span></div>
+<div class="kpi-card"><span class="val col-blue">8</span><span class="lbl">Types d'aménagement</span></div>
+<div class="kpi-card"><span class="val col-orange">1 643 km</span><span class="lbl">Longueur totale estimée</span></div>
+</div>
+<div class="card">
+<h3>Types d'aménagements recensés</h3>
+<div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-bottom:.8rem">
+<span class="badge badge-green">Piste cyclable</span>
+<span class="badge badge-blue">Bande cyclable</span>
+<span class="badge badge-teal">Coronapiste</span>
+<span class="badge badge-orange">Voie verte</span>
+<span class="badge badge-purple">Zone de rencontre</span>
+<span class="badge badge-teal">Contra-sens cyclable</span>
+<span class="badge badge-blue">Couloir bus + vélos</span>
+<span class="badge badge-orange">Chemin cyclable</span>
+</div>
+</div>
+<div class="card">
+<h3>Table amenagements_cyclables — champs principaux</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>osm_id</code></td><td>VARCHAR(50) PK</td><td>Identifiant OpenStreetMap unique</td></tr>
+<tr><td><code>nom</code></td><td>VARCHAR(300)</td><td>Nom du tronçon ou de la voie</td></tr>
+<tr><td><code>amenagement</code></td><td>VARCHAR(100)</td><td>Type d'aménagement cyclable</td></tr>
+<tr><td><code>arrondissement</code></td><td>VARCHAR(10)</td><td>Arrondissement (1 à 20)</td></tr>
+<tr><td><code>longueur</code></td><td>FLOAT</td><td>Longueur du tronçon en mètres</td></tr>
+<tr><td><code>sens</code></td><td>VARCHAR(50)</td><td>Sens de circulation (double/simple)</td></tr>
+<tr><td><code>surface</code></td><td>VARCHAR(50)</td><td>Type de surface (bitume, pavés...)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Pipeline ELT — quotidien 06h30 UTC</h3>
+<p>Contrairement au pattern ETL classique, la transformation est réalisée <strong>directement en base SQL</strong> après chargement en staging. Ce pattern ELT exploite la puissance de PostgreSQL.</p>
+<div class="pipeline">
+<span class="pipe-step">extract_load_staging</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step orange">quality_check</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">transform_in_db</span>
+</div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 6 : ÉVÉNEMENTS QFAP -->
 <section class="section" id="evenements">
-  <div class="section-header">
-    <div class="section-icon icon-purple">🎭</div>
-    <div><h2>Événements culturels — Que Faire à Paris</h2><p>Direction des Affaires Culturelles — Mairie de Paris — Etalab v2.0</p></div>
-  </div>
-  <div class="card">
-    <h3>Description</h3>
-    <p>Catalogue complet des événements culturels parisiens : concerts, expositions, spectacles, festivals, conférences, ateliers. Mis à jour quotidiennement par la Mairie de Paris sur le portail Open Data.</p>
-  </div>
-  <div class="card">
-    <h3>Table evenements_qfap — champs principaux</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><code>id</code></td><td>SERIAL PK</td><td>Identifiant auto-incrémenté</td></tr>
-          <tr><td><code>titre</code></td><td>VARCHAR(500)</td><td>Titre de l'événement</td></tr>
-          <tr><td><code>description</code></td><td>TEXT</td><td>Description détaillée</td></tr>
-          <tr><td><code>date_debut</code></td><td>DATE</td><td>Date de début de l'événement</td></tr>
-          <tr><td><code>date_fin</code></td><td>DATE</td><td>Date de fin de l'événement</td></tr>
-          <tr><td><code>adresse</code></td><td>VARCHAR(300)</td><td>Adresse du lieu</td></tr>
-          <tr><td><code>code_postal</code></td><td>VARCHAR(10)</td><td>Code postal (format 75xxx)</td></tr>
-          <tr><td><code>latitude</code></td><td>FLOAT</td><td>Coordonnée géographique N/S</td></tr>
-          <tr><td><code>longitude</code></td><td>FLOAT</td><td>Coordonnée géographique E/W</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Pipeline ELT — quotidien 06h00 UTC</h3>
-    <div class="pipeline">
-      <span class="pipe-step">extract_load_staging</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step orange">quality_check</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">transform_in_db</span>
-    </div>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-purple">6</div>
+<div><h2>Événements culturels — Que Faire à Paris</h2><p>Direction des Affaires Culturelles — Mairie de Paris — Etalab v2.0</p></div>
+</div>
+<div class="card">
+<h3>Description</h3>
+<p>Catalogue complet des événements culturels parisiens : concerts, expositions, spectacles, festivals, conférences, ateliers. Mis à jour quotidiennement par la Mairie de Paris sur le portail Open Data.</p>
+</div>
+<div class="card">
+<h3>Table evenements_qfap — champs principaux</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Colonne</th><th>Type PostgreSQL</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>SERIAL PK</td><td>Identifiant auto-incrémenté</td></tr>
+<tr><td><code>titre</code></td><td>VARCHAR(500)</td><td>Titre de l'événement</td></tr>
+<tr><td><code>description</code></td><td>TEXT</td><td>Description détaillée</td></tr>
+<tr><td><code>date_debut</code></td><td>DATE</td><td>Date de début de l'événement</td></tr>
+<tr><td><code>date_fin</code></td><td>DATE</td><td>Date de fin de l'événement</td></tr>
+<tr><td><code>adresse</code></td><td>VARCHAR(300)</td><td>Adresse du lieu</td></tr>
+<tr><td><code>code_postal</code></td><td>VARCHAR(10)</td><td>Code postal (format 75xxx)</td></tr>
+<tr><td><code>latitude</code></td><td>FLOAT</td><td>Coordonnée géographique N/S</td></tr>
+<tr><td><code>longitude</code></td><td>FLOAT</td><td>Coordonnée géographique E/W</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Pipeline ELT — quotidien 06h30 UTC</h3>
+<div class="pipeline">
+<span class="pipe-step">extract_load_staging</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step orange">quality_check</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">transform_in_db</span>
+</div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 7 : SERVICE ETL -->
 <section class="section" id="etl">
-  <div class="section-header">
-    <div class="section-icon icon-orange">⚙️</div>
-    <div><h2>Service ETL Python</h2><p>Chargement initial — container e4_etl</p></div>
-  </div>
-  <div class="card">
-    <h3>Structure du service ETL</h3>
-    <pre>etl/
+<div class="section-header">
+<div class="section-icon icon-orange">7</div>
+<div><h2>Service ETL Python</h2><p>Chargement initial — container e4_etl</p></div>
+</div>
+<div class="card">
+<h3>Structure du service ETL</h3>
+<pre>etl/
 ├── Dockerfile
 ├── main.py              ← point d'entrée principal
 ├── requirements.txt
@@ -522,31 +547,31 @@ API_BASE_URL=http://api:8000</pre>
 │   └── transform.py     ← nettoyage, typage, dédoublonnage
 └── load/
     └── load.py          ← insertion PostgreSQL via psycopg2</pre>
-  </div>
-  <div class="card">
-    <h3>Étape Extract</h3>
-    <p>Lecture des 4 fichiers CSV depuis le volume Docker <code>/data/in/</code>, encodage UTF-8, retour de DataFrames pandas avec gestion des erreurs de parsing.</p>
-    <pre>import pandas as pd
+</div>
+<div class="card">
+<h3>Étape Extract</h3>
+<p>Lecture des 4 fichiers CSV depuis le volume Docker <code>/data/in/</code>, encodage UTF-8, retour de DataFrames pandas avec gestion des erreurs de parsing.</p>
+<pre>import pandas as pd
 
-def extract_csv(filepath: str) -> pd.DataFrame:
+def extract_csv(filepath: str) -&gt; pd.DataFrame:
     df = pd.read_csv(filepath, encoding='utf-8', sep=';')
     return df</pre>
-  </div>
-  <div class="card">
-    <h3>Étape Transform</h3>
-    <ul>
-      <li>Suppression des doublons (<code>station_id</code> comme clé naturelle)</li>
-      <li>Conversion des types : <code>station_id</code> → INTEGER, <code>longueur</code> → FLOAT, coordonnées → FLOAT</li>
-      <li>Nettoyage des valeurs nulles sur les champs obligatoires</li>
-      <li>Normalisation arrondissements : format court <code>"11"</code> au lieu de <code>"75011"</code></li>
-      <li>Parsing des coordonnées géographiques (séparation lat/lon)</li>
-      <li>Conversion des timestamps <code>actualisation_donnees</code></li>
-    </ul>
-  </div>
-  <div class="card">
-    <h3>Étape Load</h3>
-    <p>Connexion via <code>psycopg2</code> avec les variables d'environnement Docker. Stratégie <strong>TRUNCATE + INSERT</strong> dans une transaction atomique — rollback automatique en cas d'erreur.</p>
-    <pre>import psycopg2, os
+</div>
+<div class="card">
+<h3>Étape Transform</h3>
+<ul>
+<li>Suppression des doublons (<code>station_id</code> comme clé naturelle)</li>
+<li>Conversion des types : <code>station_id</code> → INTEGER, <code>longueur</code> → FLOAT, coordonnées → FLOAT</li>
+<li>Nettoyage des valeurs nulles sur les champs obligatoires</li>
+<li>Normalisation arrondissements : format court <code>"11"</code> au lieu de <code>"75011"</code></li>
+<li>Parsing des coordonnées géographiques (séparation lat/lon)</li>
+<li>Conversion des timestamps <code>actualisation_donnees</code></li>
+</ul>
+</div>
+<div class="card">
+<h3>Étape Load</h3>
+<p>Connexion via <code>psycopg2</code> avec les variables d'environnement Docker. Stratégie <strong>TRUNCATE + INSERT</strong> dans une transaction atomique — rollback automatique en cas d'erreur.</p>
+<pre>import psycopg2, os
 
 conn = psycopg2.connect(
     host=os.getenv('POSTGRES_HOST'),
@@ -559,105 +584,120 @@ with conn:
     with conn.cursor() as cur:
         cur.execute("TRUNCATE TABLE velib_stations RESTART IDENTITY CASCADE;")
         cur.executemany(INSERT_SQL, rows)</pre>
-  </div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 8 : AIRFLOW -->
 <section class="section" id="airflow">
-  <div class="section-header">
-    <div class="section-icon icon-blue">🔄</div>
-    <div><h2>Orchestration Apache Airflow</h2><p>6 DAGs — Interface : http://localhost:8081</p></div>
-  </div>
-  <div class="card">
-    <h3>Vue d'ensemble des 6 DAGs</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>DAG</th><th>Schedule</th><th>Runs</th><th>Taux succès</th><th>Statut</th></tr></thead>
-        <tbody>
-          <tr><td><code>etl_velib_pipeline</code></td><td>Horaire</td><td>38</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td><code>velib_refresh_horaire</code></td><td>Horaire</td><td>26</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td><code>elt_cyclable_pipeline</code></td><td>Quotidien 06h30</td><td>13</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td><code>elt_evenements_pipeline</code></td><td>Quotidien 06h00</td><td>12</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td><code>dag_qualite_pipeline</code></td><td>Quotidien 07h00</td><td>3</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-          <tr><td><code>stats_quotidiennes</code></td><td>Quotidien 08h00</td><td>3</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>DAG 1 — etl_velib_pipeline</h3>
-    <div class="pipeline">
-      <span class="pipe-step">extract_velib</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step teal">load_velib</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">transform_velib</span>
-    </div>
-    <p>Chargement complet du référentiel stations Vélib'. Schedule horaire. 38 runs validés au 14/03/2026.</p>
-  </div>
-  <div class="card">
-    <h3>DAG 2 — velib_refresh_horaire</h3>
-    <div class="pipeline">
-      <span class="pipe-step teal">fetch_and_update_velib</span>
-    </div>
-    <p>Refresh de la disponibilité temps réel toutes les heures. TRUNCATE + INSERT sur <code>velib_disponibilite</code>. Exécutions continues depuis le 13/03/2026 13h00.</p>
-  </div>
-  <div class="card">
-    <h3>DAG 3 — elt_cyclable_pipeline</h3>
-    <div class="pipeline">
-      <span class="pipe-step">extract_load_staging</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step orange">quality_check</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">transform_in_db</span>
-    </div>
-    <p>Pattern ELT : chargement en staging → contrôle qualité SQL → transformation en base. Schedule quotidien 06h30 UTC.</p>
-  </div>
-  <div class="card">
-    <h3>DAG 4 — elt_evenements_pipeline</h3>
-    <div class="pipeline">
-      <span class="pipe-step">extract_load_staging</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step orange">quality_check</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">transform_in_db</span>
-    </div>
-    <p>Même pattern ELT pour les événements QFAP. Schedule quotidien 06h00 UTC.</p>
-  </div>
-  <div class="card">
-    <h3>DAG 5 — dag_qualite_pipeline</h3>
-    <div class="pipeline">
-      <span class="pipe-step">check_velib_stations</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step">check_velib_dispo</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step">check_cyclable</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step">check_evenements</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">rapport_final</span>
-    </div>
-    <p>4 contrôles qualité indépendants puis rapport consolidé. Schedule quotidien 07h00 UTC.</p>
-  </div>
-  <div class="card">
-    <h3>DAG 6 — stats_quotidiennes</h3>
-    <div class="pipeline">
-      <span class="pipe-step teal">stats_velib</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step teal">stats_cyclable</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step teal">stats_evenements</span>
-      <span class="pipe-arrow">→</span>
-      <span class="pipe-step green">rapport_consolide</span>
-    </div>
-    <p>Statistiques consolidées des 3 domaines chaque jour à 08h00 UTC.</p>
-  </div>
-  <div class="card">
-    <h3>Incident — Verrou PostgreSQL (13/03/2026)</h3>
-    <div class="alert alert-warn">⚠️ Lors des premières exécutions parallèles, la tâche <code>load_velib</code> est restée bloquée en attente d'un verrou TRUNCATE détenu par <code>transform_in_db</code>. Résolu en identifiant les PIDs bloquants via <code>pg_stat_activity</code> et en appelant <code>pg_terminate_backend()</code>. Les DAGs ont ensuite été décalés (06h00, 06h30, 07h00, 08h00) pour éviter les conflits.</div>
-    <pre>-- Diagnostic du verrou
+<div class="section-header">
+<div class="section-icon icon-blue">8</div>
+<div><h2>Orchestration Apache Airflow</h2></div>
+</div>
+<div class="card">
+<h3>Déclenchement des DAGs (UI + CLI)</h3>
+
+<ul>
+<li><strong>Interface Web</strong> : depuis l’UI Airflow, bouton <em>“Trigger DAG”</em>.</li>
+<li><strong>Ligne de commande (Windows / PowerShell)</strong> : déclenchement via la CLI Airflow (conteneur Airflow) pour automatiser/industrialiser les tests.</li>
+</ul>
+<pre><code class="language-powershell"># Exemple (selon votre docker-compose) :
+docker compose exec airflow-webserver airflow dags trigger elt_cyclable_pipeline
+docker compose exec airflow-webserver airflow dags trigger elt_evenements_pipeline
+</code></pre>
+<p class="small">
+
+</p>
+<p>6 DAGs — Interface : http://localhost:8081</p>
+</div>
+
+<div class="card">
+<h3>Vue d'ensemble des 6 DAGs</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>DAG</th><th>Schedule</th><th>Runs</th><th>Taux succès</th><th>Statut</th></tr></thead>
+<tbody>
+<tr><td><code>etl_velib_pipeline</code></td><td>Horaire</td><td>38</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td><code>velib_refresh_horaire</code></td><td>Horaire</td><td>26</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td><code>elt_cyclable_pipeline</code></td><td>Quotidien 06h30</td><td>13</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td><code>elt_evenements_pipeline</code></td><td>Quotidien 06h00</td><td>12</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td><code>dag_qualite_pipeline</code></td><td>Quotidien 07h00</td><td>3</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+<tr><td><code>stats_quotidiennes</code></td><td>Quotidien 08h00</td><td>3</td><td>100 %</td><td><span class="badge badge-green">✅ OK</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>DAG 1 — etl_velib_pipeline</h3>
+<div class="pipeline">
+<span class="pipe-step">extract_velib</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step teal">load_velib</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">transform_velib</span>
+</div>
+<p>Chargement complet du référentiel stations Vélib'. Schedule horaire. 38 runs validés au 14/03/2026.</p>
+</div>
+<div class="card">
+<h3>DAG 2 — velib_refresh_horaire</h3>
+<div class="pipeline">
+<span class="pipe-step teal">fetch_and_update_velib</span>
+</div>
+<p>Refresh de la disponibilité temps réel toutes les heures. TRUNCATE + INSERT sur <code>velib_disponibilite</code>. Exécutions continues depuis le 13/03/2026 13h00.</p>
+</div>
+<div class="card">
+<h3>DAG 3 — elt_cyclable_pipeline</h3>
+<div class="pipeline">
+<span class="pipe-step">extract_load_staging</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step orange">quality_check</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">transform_in_db</span>
+</div>
+<p>Pattern ELT : chargement en staging → contrôle qualité SQL → transformation en base. Schedule quotidien 06h30 UTC.</p>
+</div>
+<div class="card">
+<h3>DAG 4 — elt_evenements_pipeline</h3>
+<div class="pipeline">
+<span class="pipe-step">extract_load_staging</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step orange">quality_check</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">transform_in_db</span>
+</div>
+<p>Même pattern ELT pour les événements QFAP. Schedule quotidien 06h00 UTC.</p>
+</div>
+<div class="card">
+<h3>DAG 5 — dag_qualite_pipeline</h3>
+<div class="pipeline">
+<span class="pipe-step">check_velib_stations</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step">check_velib_dispo</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step">check_cyclable</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step">check_evenements</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">rapport_final</span>
+</div>
+<p>4 contrôles qualité indépendants puis rapport consolidé. Schedule quotidien 07h00 UTC.</p>
+</div>
+<div class="card">
+<h3>DAG 6 — stats_quotidiennes</h3>
+<div class="pipeline">
+<span class="pipe-step teal">stats_velib</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step teal">stats_cyclable</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step teal">stats_evenements</span>
+<span class="pipe-arrow">→</span>
+<span class="pipe-step green">rapport_consolide</span>
+</div>
+<p>Statistiques consolidées des 3 domaines chaque jour à 08h00 UTC.</p>
+</div>
+<div class="card">
+<h3>Incident — Verrou PostgreSQL (13/03/2026)</h3>
+<div class="alert alert-warn">⚠️ Lors des premières exécutions parallèles, la tâche <code>load_velib</code> est restée bloquée en attente d'un verrou TRUNCATE détenu par <code>transform_in_db</code>. Résolu en identifiant les PIDs bloquants via <code>pg_stat_activity</code> et en appelant <code>pg_terminate_backend()</code>. Les DAGs ont ensuite été décalés (06h00, 06h30, 07h00, 08h00) pour éviter les conflits.</div>
+<pre>-- Diagnostic du verrou
 SELECT pid, state, wait_event_type, left(query,80)
 FROM pg_stat_activity
 WHERE wait_event_type = 'Lock';
@@ -666,54 +706,220 @@ WHERE wait_event_type = 'Lock';
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE wait_event_type = 'Lock';</pre>
-  </div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 9 : BASE DE DONNÉES -->
 <section class="section" id="bdd">
-  <div class="section-header">
-    <div class="section-icon icon-teal">🗄️</div>
-    <div><h2>Base de données PostgreSQL</h2><p>Base mobilite_paris — init.sql au démarrage</p></div>
-  </div>
-  <div class="card">
-    <h3>Schéma relationnel simplifié</h3>
-    <pre>velib_stations (station_id PK)
-  └── velib_disponibilite (station_id FK → velib_stations)
+<h2>9. Modèles de données — BDD PostgreSQL</h2>
+<p class="note">MCD · MLD · MPD — Base de données <code>mobilite_paris</code>.</p>
+<div class="card">
+<h3>📐 MCD — Modèle Conceptuel de Données</h3>
+<p>4 entités identifiées — 1 relation explicite entre <strong>STATION</strong> et <strong>DISPONIBILITE</strong> — 2 entités autonomes.</p>
+<pre>
+┌─────────────────────┐              ┌──────────────────────────────┐
+│      STATION        │              │        DISPONIBILITE         │
+│─────────────────────│   1 ──────&lt;&gt; │──────────────────────────────│
+│ # station_id (PK)   │              │ ° station_id  [→ STATION]    │
+│ ° nom_station       │              │ ° nb_velos_disponibles       │
+│ ° capacite          │              │ ° velos_electriques          │
+│ ° latitude          │              │ ° velos_mecaniques           │
+│ ° longitude         │              │ ° nb_bornettes_libres        │
+│ ° statut            │              │ ° station_en_fonctionnement  │
+│ ° date_collecte     │              │ ° borne_paiement             │
+└─────────────────────┘              │ ° retour_velib_possible      │
+                                     │ ° actualisation_donnee       │
+                                     │ ° commune / code_insee       │
+                                     └──────────────────────────────┘
 
-amenagements_cyclables (osm_id PK)   -- indépendante
+┌──────────────────────────────┐     ┌──────────────────────────────┐
+│     AMENAGEMENT_CYCLABLE     │     │       EVENEMENT_PARIS        │
+│──────────────────────────────│     │──────────────────────────────│
+│ # osm_id (UNIQUE)            │     │ # id (PK)                    │
+│ ° nom                        │     │ ° event_id                   │
+│ ° amenagement                │     │ ° titre                      │
+│ ° arrondissement             │     │ ° description                │
+│ ° longueur / surface         │     │ ° nom_lieu / adresse_lieu    │
+│ ° sens / coronapiste         │     │ ° code_postal / ville        │
+│ ° amenagement_temporaire     │     │ ° coordonnees_geo            │
+│ ° geo_shape / geo_point_2d   │     │ ° transport / type_prix      │
+│ ° source / date_export       │     │ ° date_debut / date_fin      │
+└──────────────────────────────┘     │ ° inserted_at [DEFAULT now()]│
+                                     └──────────────────────────────┘
+      </pre>
+<p class="note">
+        Relation <strong>STATION (1) → DISPONIBILITE (N)</strong> : une station possède plusieurs snapshots horodatés de disponibilité (rafraîchissement horaire).
+        La FK physique est volontairement absente pour optimiser les inserts haute fréquence. <strong>AMENAGEMENT_CYCLABLE</strong> et <strong>EVENEMENT_PARIS</strong> sont des entités autonomes.
+      </p>
+</div>
+<div class="card">
+<h3>📋 MLD — Modèle Logique de Données</h3>
+<pre>
+velib_stations (
+    station_id           [PK]  TEXT,
+    nom_station                TEXT,
+    nb_velos_disponibles       INTEGER,
+    velos_electriques          INTEGER,
+    velos_mecaniques           INTEGER,
+    nb_bornettes_libres        INTEGER,
+    capacite                   INTEGER,
+    statut                     TEXT,
+    latitude                   DOUBLE,
+    longitude                  DOUBLE,
+    date_collecte              TIMESTAMP
+)
 
-evenements_qfap (id SERIAL PK)       -- indépendante</pre>
-  </div>
-  <div class="card">
-    <h3>Stratégies de refresh par table</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Table</th><th>Lignes</th><th>Stratégie</th><th>Fréquence</th></tr></thead>
-        <tbody>
-          <tr><td><code>velib_stations</code></td><td>1 510</td><td>TRUNCATE + INSERT</td><td>Ponctuelle (ETL)</td></tr>
-          <tr><td><code>velib_disponibilite</code></td><td>1 510</td><td>TRUNCATE + INSERT</td><td>⏱️ Horaire (Airflow)</td></tr>
-          <tr><td><code>amenagements_cyclables</code></td><td>18 170</td><td>TRUNCATE + INSERT</td><td>Quotidienne 06h30</td></tr>
-          <tr><td><code>evenements_qfap</code></td><td>Variable</td><td>TRUNCATE + INSERT</td><td>Quotidienne 06h00</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="alert alert-info">💡 La base PostgreSQL est initialisée automatiquement via le fichier <code>sql/init.sql</code> monté dans <code>/docker-entrypoint-initdb.d/</code> au premier démarrage du container.</div>
-  </div>
+velib_disponibilite (
+    station_id                 BIGINT  [→ velib_stations.station_id, lien logique],
+    nom_station                TEXT,
+    station_en_fonctionnement  BOOLEAN,
+    capacite_station           BIGINT,
+    nb_bornettes_libres        BIGINT,
+    nb_velos_disponibles       BIGINT,
+    velos_mecaniques           BIGINT,
+    velos_electriques          BIGINT,
+    borne_paiement             BOOLEAN,
+    retour_velib_possible      BOOLEAN,
+    actualisation_donnee       TIMESTAMP,
+    coordonnees_geo            TEXT,
+    commune                    TEXT,
+    code_insee                 BIGINT,
+    station_opening_hours      DOUBLE
+)
+
+amenagements_cyclables (
+    osm_id                 [UNIQUE]  TEXT,
+    nom                             TEXT,
+    amenagement                     TEXT,
+    cote_amenagement                TEXT,
+    sens                            TEXT,
+    surface                         TEXT,
+    arrondissement                  TEXT,
+    bois                            TEXT,
+    coronapiste                     TEXT,
+    amenagement_temporaire          TEXT,
+    infra_bidirectionnelle          TEXT,
+    voie_sens_unique                TEXT,
+    position_amenagement            TEXT,
+    vmax_autorisee                  TEXT,
+    date_export                     TEXT,
+    source                          TEXT,
+    longueur                        DOUBLE,
+    geo_shape                       TEXT,
+    geo_point_2d                    TEXT
+)
+
+evenements_qfap (
+    id               [PK]           TEXT,
+    event_id                        TEXT,
+    url                             TEXT,
+    titre                           TEXT,
+    description                     TEXT,
+    nom_lieu                        TEXT,
+    adresse_lieu                    TEXT,
+    code_postal                     TEXT,
+    ville                           TEXT,
+    coordonnees_geo                 TEXT,
+    transport                       TEXT,
+    type_prix                       TEXT,
+    date_debut                      TIMESTAMP,
+    date_fin                        TIMESTAMP,
+    inserted_at    [DEFAULT now()]  TIMESTAMP
+)
+      </pre>
+</div>
+<div class="card">
+<h3>🔧 MPD — Modèle Physique de Données (PostgreSQL)</h3>
+<pre>
+CREATE TABLE velib_stations (
+    station_id            TEXT             NOT NULL,
+    nom_station           TEXT,
+    nb_velos_disponibles  INTEGER,
+    velos_electriques     INTEGER,
+    velos_mecaniques      INTEGER,
+    nb_bornettes_libres   INTEGER,
+    capacite              INTEGER,
+    statut                TEXT,
+    latitude              DOUBLE PRECISION,
+    longitude             DOUBLE PRECISION,
+    date_collecte         TIMESTAMP WITHOUT TIME ZONE,
+    CONSTRAINT velib_stations_pkey PRIMARY KEY (station_id)
+);
+
+CREATE TABLE velib_disponibilite (
+    station_id                BIGINT,
+    nom_station               TEXT,
+    station_en_fonctionnement BOOLEAN,
+    capacite_station          BIGINT,
+    nb_bornettes_libres       BIGINT,
+    nb_velos_disponibles      BIGINT,
+    velos_mecaniques          BIGINT,
+    velos_electriques         BIGINT,
+    borne_paiement            BOOLEAN,
+    retour_velib_possible     BOOLEAN,
+    actualisation_donnee      TIMESTAMP WITHOUT TIME ZONE,
+    coordonnees_geo           TEXT,
+    commune                   TEXT,
+    code_insee                BIGINT,
+    station_opening_hours     DOUBLE PRECISION
+    -- Lien logique : station_id → velib_stations.station_id (FK physique absente, choix performance)
+);
+
+CREATE TABLE amenagements_cyclables (
+    osm_id                 TEXT,
+    nom                    TEXT,
+    amenagement            TEXT,
+    cote_amenagement       TEXT,
+    sens                   TEXT,
+    surface                TEXT,
+    arrondissement         TEXT,
+    bois                   TEXT,
+    coronapiste            TEXT,
+    amenagement_temporaire TEXT,
+    infra_bidirectionnelle TEXT,
+    voie_sens_unique       TEXT,
+    position_amenagement   TEXT,
+    vmax_autorisee         TEXT,
+    date_export            TEXT,
+    source                 TEXT,
+    longueur               DOUBLE PRECISION,
+    geo_shape              TEXT,
+    geo_point_2d           TEXT,
+    CONSTRAINT amenagements_cyclables_osm_id_unique UNIQUE (osm_id)
+);
+
+CREATE TABLE evenements_qfap (
+    id               TEXT             NOT NULL,
+    event_id         TEXT,
+    url              TEXT,
+    titre            TEXT,
+    description      TEXT,
+    nom_lieu         TEXT,
+    adresse_lieu     TEXT,
+    code_postal      TEXT,
+    ville            TEXT,
+    coordonnees_geo  TEXT,
+    transport        TEXT,
+    type_prix        TEXT,
+    date_debut       TIMESTAMP WITHOUT TIME ZONE,
+    date_fin         TIMESTAMP WITHOUT TIME ZONE,
+    inserted_at      TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
+    CONSTRAINT evenements_qfap_pkey PRIMARY KEY (id)
+);
+      </pre>
+<p class="note"><strong>Choix de conception :</strong> absence de FK physique sur <code>velib_disponibilite</code> afin de garantir des inserts rapides et tolérants aux variations des données temps réel.</p>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 10 : API FASTAPI -->
 <section class="section" id="api">
-  <div class="section-header">
-    <div class="section-icon icon-green">🌐</div>
-    <div><h2>API REST FastAPI</h2><p>Port 8000 — Swagger : http://localhost:8000/docs</p></div>
-  </div>
-  <div class="card">
-    <h3>Structure du service API</h3>
-    <pre>api/
+<div class="section-header">
+<div class="section-icon icon-green">10</div>
+<div><h2>API REST FastAPI</h2><p>Port 8000 — Swagger : http://localhost:8000/docs</p></div>
+</div>
+<div class="card">
+<h3>Structure du service API</h3>
+<pre>api/
 ├── Dockerfile
 ├── main.py
 ├── requirements.txt
@@ -721,95 +927,93 @@ evenements_qfap (id SERIAL PK)       -- indépendante</pre>
     ├── velib.py        ← /api/velib/*
     ├── cyclable.py     ← /api/cyclable/*
     └── evenements.py   ← /api/evenements/*</pre>
-  </div>
-  <div class="card">
-    <h3>Authentification par clé API</h3>
-    <p>Toutes les routes sont protégées par une clé API transmise dans le header HTTP.</p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Header</th><th>Valeur attendue</th></tr></thead>
-        <tbody>
-          <tr><td><code>X-API-KEY</code></td><td><code>e4-api-key-mobilite-paris-2026</code></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <pre>curl -H "X-API-KEY: e4-api-key-mobilite-paris-2026" \
+</div>
+<div class="card">
+<h3>Authentification par clé API</h3>
+<p>Toutes les routes sont protégées par une clé API transmise dans le header HTTP.</p>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Header</th><th>Valeur attendue</th></tr></thead>
+<tbody>
+<tr><td><code> <em>(La clé API est injectée via variable d’environnement, définie dans <code>.env</code> et non versionnée.)</em>X-API-KEY</code></td><td><code>e4-api-key-mobilite-paris-2026</code></td></tr>
+</tbody>
+</table>
+</div>
+<pre>curl -H "X-API-KEY: e4-api-key-mobilite-paris-2026" \
      http://localhost:8000/api/velib/stats</pre>
-  </div>
-  <div class="card">
-    <h3>Endpoints disponibles</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Paramètres</th></tr></thead>
-        <tbody>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/stations</code></td><td>Liste toutes les stations Vélib'</td><td>limit, offset</td></tr>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/stations/{id}</code></td><td>Détail d'une station par ID</td><td>station_id</td></tr>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/disponibilite</code></td><td>Disponibilité temps réel</td><td>limit, offset</td></tr>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/stats</code></td><td>Statistiques globales réseau Vélib'</td><td>—</td></tr>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/cyclable/</code></td><td>Liste des aménagements cyclables</td><td>limit, offset, arrondissement</td></tr>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/cyclable/stats</code></td><td>Statistiques aménagements cyclables</td><td>—</td></tr>
-          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/evenements/</code></td><td>Liste des événements QFAP</td><td>limit, offset, code_postal</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Exemples de réponses JSON</h3>
-    <h4>GET /api/velib/stats</h4>
-    <pre>{
+</div>
+<div class="card">
+<h3>Endpoints disponibles</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Paramètres</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/stations</code></td><td>Liste toutes les stations Vélib'</td><td>limit, offset</td></tr>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/stations/{id}</code></td><td>Détail d'une station par ID</td><td>station_id</td></tr>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/disponibilite</code></td><td>Disponibilité temps réel</td><td>limit, offset</td></tr>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/velib/stats</code></td><td>Statistiques globales réseau Vélib'</td><td>—</td></tr>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/cyclable/</code></td><td>Liste des aménagements cyclables</td><td>limit, offset, arrondissement</td></tr>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/cyclable/stats</code></td><td>Statistiques aménagements cyclables</td><td>—</td></tr>
+<tr><td><span class="badge badge-green">GET</span></td><td><code>/api/evenements/</code></td><td>Liste des événements QFAP</td><td>limit, offset, code_postal</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Exemples de réponses JSON</h3>
+<h4>GET /api/velib/stats</h4>
+<pre>{
   "nb_stations": 1510,
   "total_velos": 17138,
   "total_mecaniques": 10371,
   "total_electriques": 6767,
   "total_bornettes_libres": 25383
 }</pre>
-    <h4>GET /api/cyclable/stats</h4>
-    <pre>{
+<h4>GET /api/cyclable/stats</h4>
+<pre>{
   "nb_amenagements": 18170,
   "longueur_totale_km": 1642.69,
   "nb_types": 8,
   "nb_arrondissements": 20
 }</pre>
-  </div>
-  <div class="card">
-    <h3>Codes de retour HTTP</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Code</th><th>Signification</th></tr></thead>
-        <tbody>
-          <tr><td><span class="badge badge-green">200</span></td><td>Succès — données retournées en JSON</td></tr>
-          <tr><td><span class="badge badge-red">403</span></td><td>Clé API absente ou invalide</td></tr>
-          <tr><td><span class="badge badge-red">404</span></td><td>Ressource introuvable</td></tr>
-          <tr><td><span class="badge badge-orange">422</span></td><td>Paramètre invalide (validation FastAPI)</td></tr>
-          <tr><td><span class="badge badge-red">500</span></td><td>Erreur serveur interne</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+</div>
+<div class="card">
+<h3>Codes de retour HTTP</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Code</th><th>Signification</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge-green">200</span></td><td>Succès — données retournées en JSON</td></tr>
+<tr><td><span class="badge badge-red">403</span></td><td>Clé API absente ou invalide</td></tr>
+<tr><td><span class="badge badge-red">404</span></td><td>Ressource introuvable</td></tr>
+<tr><td><span class="badge badge-orange">422</span></td><td>Paramètre invalide (validation FastAPI)</td></tr>
+<tr><td><span class="badge badge-red">500</span></td><td>Erreur serveur interne</td></tr>
+</tbody>
+</table>
+</div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 11 : DASHBOARD STREAMLIT -->
 <section class="section" id="dashboard">
-  <div class="section-header">
-    <div class="section-icon icon-orange">📊</div>
-    <div><h2>Dashboard Streamlit</h2><p>Port 8501 — http://localhost:8501</p></div>
-  </div>
-  <div class="card">
-    <h3>Fonctionnalités du dashboard</h3>
-    <ul>
-      <li>🗺️ <strong>Carte interactive Folium</strong> — géolocalisation des 1 510 stations Vélib' avec popup disponibilité</li>
-      <li>📊 <strong>Graphiques Plotly</strong> — répartition mécanique/électrique, taux d'occupation par arrondissement</li>
-      <li>🛣️ <strong>Tableau aménagements cyclables</strong> — filtres par arrondissement et type</li>
-      <li>🎭 <strong>Agenda événements QFAP</strong> — filtres par date et code postal</li>
-      <li>✅ <strong>Rapport qualité</strong> — résultats des 4 contrôles quotidiens</li>
-      <li>🔄 <strong>Bouton refresh</strong> — rechargement des données depuis l'API en un clic</li>
-    </ul>
-  </div>
-  <div class="card">
-    <h3>Consommation de l'API depuis Streamlit</h3>
-    <pre>import requests, os
+<div class="section-header">
+<div class="section-icon icon-orange">11</div>
+<div><h2>Dashboard Streamlit</h2><p>Port 8501 — http://localhost:8501</p></div>
+</div>
+<div class="card">
+<h3>Fonctionnalités du dashboard</h3>
+<ul>
+<li>🗺️ <strong>Carte interactive Folium</strong> — géolocalisation des 1 510 stations Vélib' avec popup disponibilité</li>
+<li>📊 <strong>Graphiques Plotly</strong> — répartition mécanique/électrique, taux d'occupation par arrondissement</li>
+<li>🛣️ <strong>Tableau aménagements cyclables</strong> — filtres par arrondissement et type</li>
+<li>🎭 <strong>Agenda événements QFAP</strong> — filtres par date et code postal</li>
+<li>✅ <strong>Rapport qualité</strong> — résultats des 4 contrôles quotidiens</li>
+<li>🔄 <strong>Bouton refresh</strong> — rechargement des données depuis l'API en un clic</li>
+</ul>
+</div>
+<div class="card">
+<h3>Consommation de l'API depuis Streamlit</h3>
+<pre>import requests, os
 
 API_BASE = os.getenv("API_BASE_URL", "http://api:8000")
 API_KEY  = os.getenv("API_KEY")
@@ -823,155 +1027,208 @@ def get_stations(limit=100):
     r = requests.get(f"{API_BASE}/api/velib/stations",
                      headers=HEADERS, params={"limit": limit})
     return r.json()</pre>
-  </div>
+</div>
+
+<h3>Accès direct PostgreSQL (lecture seule) + Éditeur SQL Streamlit — preuve C9</h3>
+<p>
+En complément de l’API REST (FastAPI), le dashboard Streamlit propose une page <strong>“Éditeur SQL”</strong>
+permettant d’exécuter des <strong>requêtes SQL en lecture seule</strong> directement sur la base PostgreSQL.
+Cette fonctionnalité sert de démonstration de la compétence <strong>C9</strong> (développement de requêtes SQL d’extraction/agrégation).
+</p>
+<h4>Connexion à PostgreSQL (variables d’environnement)</h4>
+<pre><code class="language-python">import psycopg2, os
+
+conn = psycopg2.connect(
+    host=os.getenv("POSTGRES_HOST", "postgres"),
+    port=os.getenv("POSTGRES_PORT", "5432"),
+    dbname=os.getenv("POSTGRES_DB", "mobilite_paris"),
+    user=os.getenv("POSTGRES_USER", "e4_user"),
+    password=os.getenv("POSTGRES_PASSWORD", "e4_password_2026")
+)
+</code></pre>
+<h4>Sécurisation minimale : blocage des requêtes destructrices</h4>
+<p>
+Pour garantir un usage <strong>lecture seule</strong>, l’application filtre les mots-clés SQL à risque
+(<code>DROP</code>, <code>DELETE</code>, <code>TRUNCATE</code>, <code>INSERT</code>, <code>UPDATE</code>, etc.).  
+En cas de détection, l’exécution est refusée.
+</p>
+<pre><code class="language-python">def is_safe(q: str) -&gt; bool:
+    forbidden = ["drop", "delete", "truncate", "insert", "update", "alter", "create"]
+    q_lower = q.lower()
+    return not any(kw in q_lower for kw in forbidden)
+</code></pre>
+<h4>Exemples de requêtes SQL (extraction + agrégation)</h4>
+<ul>
+<li><strong>Top 20 stations Vélib les plus équipées</strong> (tri + limite) :</li>
+</ul>
+<pre><code class="language-sql">SELECT nom_station, nb_velos_disponibles,
+       velos_electriques, velos_mecaniques, nb_bornettes_libres
+FROM velib_disponibilite
+ORDER BY nb_velos_disponibles DESC
+LIMIT 20;</code></pre>
+<ul>
+<li><strong>Événements par arrondissement (top 15)</strong> (agrégation <code>COUNT(*)</code>) :</li>
+</ul>
+<pre><code class="language-sql">SELECT code_postal,
+       COUNT(*) AS nb_evenements
+FROM evenements_qfap
+WHERE code_postal IS NOT NULL
+GROUP BY code_postal
+ORDER BY nb_evenements DESC
+LIMIT 15;</code></pre>
+<ul>
+<li><strong>Types d’aménagements cyclables</strong> (agrégation + somme des longueurs) :</li>
+</ul>
+<pre><code class="language-sql">SELECT amenagement,
+       COUNT(*)                        AS nb,
+       ROUND(SUM(longueur)::numeric,2) AS km_total
+FROM amenagements_cyclables
+WHERE amenagement IS NOT NULL
+GROUP BY amenagement
+ORDER BY km_total DESC;</code></pre>
+<p>
+Ces requêtes sont ensuite visualisées automatiquement dans Streamlit (table + graphique), ce qui constitue une démonstration simple
+de l’usage “SQL → analyse” dans un contexte BI.
+</p>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 12 : QUALITE DES DONNEES -->
 <section class="section" id="qualite">
-  <div class="section-header">
-    <div class="section-icon icon-green">✅</div>
-    <div><h2>Qualité des données</h2><p>DAG dag_qualite_pipeline — quotidien 07h00 UTC</p></div>
-  </div>
-  <div class="card">
-    <h3>Les 4 contrôles qualité automatisés</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Contrôle</th><th>Table cible</th><th>Règle vérifiée</th><th>Résultat</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><code>check_velib_stations</code></td>
-            <td>velib_stations</td>
-            <td>Nb lignes ≥ 1 000, pas de station_id null, coordonnées valides</td>
-            <td><span class="badge badge-green">✅ PASS</span></td>
-          </tr>
-          <tr>
-            <td><code>check_velib_dispo</code></td>
-            <td>velib_disponibilite</td>
-            <td>Nb lignes = nb stations, velos_disponibles ≥ 0, pas de valeurs négatives</td>
-            <td><span class="badge badge-green">✅ PASS</span></td>
-          </tr>
-          <tr>
-            <td><code>check_cyclable</code></td>
-            <td>amenagements_cyclables</td>
-            <td>Nb lignes ≥ 10 000, osm_id unique, arrondissement non null</td>
-            <td><span class="badge badge-green">✅ PASS</span></td>
-          </tr>
-          <tr>
-            <td><code>check_evenements</code></td>
-            <td>evenements_qfap</td>
-            <td>Nb lignes ≥ 1, titre non null, dates cohérentes (debut ≤ fin)</td>
-            <td><span class="badge badge-green">✅ PASS</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Rapport qualité consolidé (extrait)</h3>
-    <pre>=== RAPPORT QUALITE — 14/03/2026 07:00 UTC ===
+<div class="section-header">
+<div class="section-icon icon-green">12</div>
+<div><h2>Qualité des données</h2><p>DAG dag_qualite_pipeline — quotidien 07h00 UTC</p></div>
+</div>
+<div class="card">
+<h3>Les 4 contrôles qualité automatisés</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Contrôle</th><th>Table cible</th><th>Règle vérifiée</th><th>Résultat</th></tr></thead>
+<tbody>
+<tr>
+<td><code>check_velib_stations</code></td>
+<td>velib_stations</td>
+<td>Nb lignes ≥ 1 000, pas de station_id null, coordonnées valides</td>
+<td><span class="badge badge-green">✅ PASS</span></td>
+</tr>
+<tr>
+<td><code>check_velib_dispo</code></td>
+<td>velib_disponibilite</td>
+<td>Nb lignes = nb stations, velos_disponibles ≥ 0, pas de valeurs négatives</td>
+<td><span class="badge badge-green">✅ PASS</span></td>
+</tr>
+<tr>
+<td><code>check_cyclable</code></td>
+<td>amenagements_cyclables</td>
+<td>Nb lignes ≥ 10 000, osm_id unique, arrondissement non null</td>
+<td><span class="badge badge-green">✅ PASS</span></td>
+</tr>
+<tr>
+<td><code>check_evenements</code></td>
+<td>evenements_qfap</td>
+<td>Nb lignes ≥ 1, titre non null, dates cohérentes (debut ≤ fin)</td>
+<td><span class="badge badge-green">✅ PASS</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Rapport qualité consolidé (extrait)</h3>
+<pre>=== RAPPORT QUALITE — 14/03/2026 07:00 UTC ===
 
 [velib_stations]     ✅ 1510 lignes — 0 doublons — coords OK
-[velib_disponibilite]✅ 1510 lignes — valeurs toutes >= 0
+[velib_disponibilite]✅ 1510 lignes — valeurs toutes &gt;= 0
 [amenagements]       ✅ 18170 lignes — osm_id unique — 20 arrondissements
 [evenements_qfap]    ✅ 847 lignes — dates cohérentes
 
 BILAN GLOBAL : 4/4 contrôles PASS ✅</pre>
-  </div>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 13 : RGPD -->
 <section class="section" id="rgpd">
-  <div class="section-header">
-    <div class="section-icon icon-purple">🔒</div>
-    <div><h2>Conformité RGPD</h2><p>Données open data — aucune donnée personnelle collectée</p></div>
-  </div>
-  <div class="card">
-    <h3>Analyse RGPD du projet</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Point RGPD</th><th>Situation</th><th>Statut</th></tr></thead>
-        <tbody>
-          <tr><td>Données personnelles collectées</td><td>Aucune — toutes les données sont open data agrégées</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
-          <tr><td>Licences des sources</td><td>Etalab v2.0 (réutilisation libre) + ODbL (attribution OSM)</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
-          <tr><td>Secrets en clair dans le code</td><td>Aucun — variables d'environnement via .env</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
-          <tr><td>Fichier .env versionné</td><td>Listé dans .gitignore — non commité</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
-          <tr><td>Accès API protégé</td><td>Clé API obligatoire sur tous les endpoints</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
-          <tr><td>Journalisation personnelle</td><td>Aucun log utilisateur — logs techniques uniquement</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="alert alert-success">✅ Le projet ne collecte aucune donnée à caractère personnel. Toutes les sources sont des jeux de données open data publiés par la Mairie de Paris sous licences ouvertes. Aucune obligation RGPD spécifique ne s'applique.</div>
-  </div>
-  <div class="card">
-    <h3>Attributions licences</h3>
-    <ul>
-      <li>Données Vélib' et QFAP : <strong>Licence Ouverte Etalab v2.0</strong> — réutilisation libre avec mention de la source</li>
-      <li>Données aménagements cyclables : <strong>ODbL 1.0</strong> — attribution OpenStreetMap contributors obligatoire</li>
-    </ul>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-purple">13</div>
+<div><h2>Conformité RGPD</h2><p>Données open data — aucune donnée personnelle collectée</p></div>
+</div>
+<div class="card">
+<h3>Analyse RGPD du projet</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Point RGPD</th><th>Situation</th><th>Statut</th></tr></thead>
+<tbody>
+<tr><td>Données personnelles collectées</td><td>Aucune — toutes les données sont open data agrégées</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
+<tr><td>Licences des sources</td><td>Etalab v2.0 (réutilisation libre) + ODbL (attribution OSM)</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
+<tr><td>Secrets en clair dans le code</td><td>Aucun — variables d'environnement via .env</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
+<tr><td>Fichier .env versionné</td><td>Listé dans .gitignore — non commité</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
+<tr><td>Accès API protégé</td><td>Clé API obligatoire sur tous les endpoints</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
+<tr><td>Journalisation personnelle</td><td>Aucun log utilisateur — logs techniques uniquement</td><td><span class="badge badge-green">✅ Conforme</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="alert alert-success">✅ Le projet ne collecte aucune donnée à caractère personnel. Toutes les sources sont des jeux de données open data publiés par la Mairie de Paris sous licences ouvertes. Aucune obligation RGPD spécifique ne s'applique.</div>
+</div>
+<div class="card">
+<h3>Attributions licences</h3>
+<ul>
+<li>Données Vélib' et QFAP : <strong>Licence Ouverte Etalab v2.0</strong> — réutilisation libre avec mention de la source</li>
+<li>Données aménagements cyclables : <strong>ODbL 1.0</strong> — attribution OpenStreetMap contributors obligatoire</li>
+</ul>
+</div>
 </section>
-
 <div class="divider"></div>
-
 <!-- SECTION 14 : CONCLUSION -->
 <section class="section" id="conclusion">
-  <div class="section-header">
-    <div class="section-icon icon-blue">📌</div>
-    <div><h2>Conclusion</h2><p>Bilan du projet E4 Data Mobilité Paris</p></div>
-  </div>
-  <div class="card">
-    <h3>Récapitulatif des réalisations</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Livrable</th><th>Description</th><th>Statut</th></tr></thead>
-        <tbody>
-          <tr><td>Infrastructure Docker</td><td>7 services conteneurisés, réseau e4_net, volumes persistants</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>Service ETL</td><td>Extract / Transform / Load des 4 sources CSV</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>Orchestration Airflow</td><td>6 DAGs planifiés — 100 % de taux de succès</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>Base de données PostgreSQL</td><td>4 tables, clés étrangères, init automatique</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>API FastAPI</td><td>7 endpoints sécurisés, Swagger auto-généré</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>Dashboard Streamlit</td><td>Cartes interactives, graphiques, filtres</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>Qualité des données</td><td>4 contrôles automatisés + rapport quotidien</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-          <tr><td>Conformité RGPD</td><td>Aucune donnée personnelle, licences respectées</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="card">
-    <h3>Points forts du projet</h3>
-    <ul>
-      <li>✅ Pipeline entièrement automatisé et orchestré sans intervention manuelle</li>
-      <li>✅ Données Vélib' rafraîchies toutes les heures — 26 runs consécutifs validés</li>
-      <li>✅ Résolution documentée de l'incident de verrou PostgreSQL</li>
-      <li>✅ Double pattern ETL et ELT selon la nature des données</li>
-      <li>✅ API sécurisée avec documentation Swagger auto-générée</li>
-      <li>✅ Zéro donnée personnelle — conformité RGPD totale</li>
-    </ul>
-  </div>
-  <div class="card">
-    <h3>Axes d'amélioration possibles</h3>
-    <ul>
-      <li>🔧 Historisation des snapshots Vélib' pour analyse temporelle</li>
-      <li>🔧 Intégration d'un outil de monitoring (Prometheus + Grafana)</li>
-      <li>🔧 Authentification JWT sur l'API à la place de la clé statique</li>
-      <li>🔧 Tests unitaires automatisés sur les fonctions ETL</li>
-      <li>🔧 Déploiement sur un serveur distant (VM cloud ou Kubernetes)</li>
-    </ul>
-  </div>
+<div class="section-header">
+<div class="section-icon icon-blue">14</div>
+<div><h2>Conclusion</h2><p>Bilan du projet E4 Data Mobilité Paris</p></div>
+</div>
+<div class="card">
+<h3>Récapitulatif des réalisations</h3>
+<div class="tbl-wrap">
+<table>
+<thead><tr><th>Livrable</th><th>Description</th><th>Statut</th></tr></thead>
+<tbody>
+<tr><td>Infrastructure Docker</td><td>7 services conteneurisés, réseau e4_net, volumes persistants</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>Service ETL</td><td>Extract / Transform / Load des 4 sources CSV</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>Orchestration Airflow</td><td>6 DAGs planifiés — 100 % de taux de succès</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>Base de données PostgreSQL</td><td>4 tables, clés étrangères, init automatique</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>API FastAPI</td><td>7 endpoints sécurisés, Swagger auto-généré</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>Dashboard Streamlit</td><td>Cartes interactives, graphiques, filtres</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>Qualité des données</td><td>4 contrôles automatisés + rapport quotidien</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+<tr><td>Conformité RGPD</td><td>Aucune donnée personnelle, licences respectées</td><td><span class="badge badge-green">✅ Livré</span></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h3>Points forts du projet</h3>
+<ul>
+<li>✅ Pipeline entièrement automatisé et orchestré sans intervention manuelle</li>
+<li>✅ Données Vélib' rafraîchies toutes les heures — 26 runs consécutifs validés</li>
+<li>✅ Résolution documentée de l'incident de verrou PostgreSQL</li>
+<li>✅ Double pattern ETL et ELT selon la nature des données</li>
+<li>✅ API sécurisée avec documentation Swagger auto-générée</li>
+<li>✅ Zéro donnée personnelle — conformité RGPD totale</li>
+</ul>
+</div>
+<div class="card">
+<h3>Axes d'amélioration possibles</h3>
+<ul>
+<li>🔧 Historisation des snapshots Vélib' pour analyse temporelle</li>
+<li>🔧 Intégration d'un outil de monitoring (Prometheus + Grafana)</li>
+<li>🔧 Authentification JWT sur l'API à la place de la clé statique</li>
+<li>🔧 Tests unitaires automatisés sur les fonctions ETL</li>
+<li>🔧 Déploiement sur un serveur distant (VM cloud ou Kubernetes)</li>
+</ul>
+</div>
 </section>
-
 </main>
 </div>
-
 <footer>
-  <strong>Rapport E4 — Data Mobilité Paris</strong><br>
-  Pipeline open data · Apache Airflow · PostgreSQL 16 · FastAPI · Streamlit · Docker Compose<br>
-  <span style="opacity:.5;font-size:.8rem">Mars 2026 — E4 Data Engineering</span>
+<strong>Rapport E4 — Data Mobilité Paris</strong><br/>
+  Pipeline open data · Apache Airflow · PostgreSQL 16 · FastAPI · Streamlit · Docker Compose<br/>
+<span style="opacity:.5;font-size:.8rem">Mars 2026 — E4 Data Engineering</span>
 </footer>
-
 </body>
 </html>
