@@ -49,11 +49,6 @@ VELIB_API_URL = (
 # ÉTAPE 1 — EXTRACT
 # ─────────────────────────────────────────
 def extract_velib(**context):
-    """
-    EXTRACT : Appel à l'API publique Vélib (OpenData Paris).
-    Récupère jusqu'à 100 enregistrements temps réel.
-    Pousse les données brutes dans XCom pour la tâche suivante.
-    """
     logger.info("🔵 [EXTRACT] Interrogation API Vélib OpenData Paris...")
     all_records = []
     offset = 0
@@ -83,13 +78,6 @@ def extract_velib(**context):
 # ÉTAPE 2 — TRANSFORM
 # ─────────────────────────────────────────
 def transform_velib(**context):
-    """
-    TRANSFORM : Nettoyage et homogénéisation des données brutes.
-    - Suppression des enregistrements sans station_id ou nom
-    - Typage explicite (int, float)
-    - Normalisation des champs coordonnées
-    - Log des enregistrements rejetés
-    """
     logger.info("🟡 [TRANSFORM] Début du nettoyage des données...")
     raw = context["ti"].xcom_pull(key="raw_velib", task_ids="extract_velib")
 
@@ -112,22 +100,28 @@ def transform_velib(**context):
             rejected += 1
             continue
 
+        # is_installed et is_returnable → boolean
+        est_installee   = str(rec.get("is_installed",  "NON")).upper() == "OUI"
+        est_retournante = str(rec.get("is_renting",    "NON")).upper() == "OUI"
+
         cleaned.append({
-            "station_id":             str(rec["stationcode"]).strip(),
-            "nom_station":            str(rec["name"]).strip(),
-            "nb_velos_disponibles":   int(rec.get("numbikesavailable") or 0),
-            "velos_electriques":      int(rec.get("ebike")            or 0),
-            "velos_mecaniques":       int(rec.get("mechanical")       or 0),
-            "nb_bornettes_libres":    int(rec.get("numdocksavailable") or 0),
-            "capacite":               int(rec.get("capacity")          or 0),
-            "statut":                 str(rec.get("is_installed", "NON")),
-            "latitude":               float(lat),
-            "longitude":              float(lon),
+            "station_id":            str(rec["stationcode"]).strip(),
+            "nom_station":           str(rec["name"]).strip(),
+            "capacite_station":      int(rec.get("capacity")           or 0),
+            # coordonnées stockées en texte "lat,lon"
+            "coordonnees_geo":       f"{lat},{lon}",
+            "nb_velos_disponibles":  int(rec.get("numbikesavailable")  or 0),
+            "velos_electriques":     int(rec.get("ebike")              or 0),
+            "velos_mecaniques":      int(rec.get("mechanical")         or 0),
+            "bornes_disponibles":    int(rec.get("numdocksavailable")  or 0),
+            "bornes_indisponibles":  int(rec.get("numbrokendocks")     or 0),
+            "est_installee":         est_installee,
+            "est_retournante":       est_retournante,
         })
 
     logger.info(
         f"🟡 [TRANSFORM] {len(cleaned)} valides | {rejected} rejetés "
-        f"| Taux qualité : {round(len(cleaned)/len(raw)*100,1)}%"
+        f"| Taux qualité : {round(len(cleaned)/len(raw)*100, 1)}%"
     )
     context["ti"].xcom_push(key="clean_velib", value=cleaned)
 
@@ -136,11 +130,6 @@ def transform_velib(**context):
 # ÉTAPE 3 — LOAD
 # ─────────────────────────────────────────
 def load_velib(**context):
-    """
-    LOAD : Insertion en base PostgreSQL avec stratégie UPSERT.
-    - INSERT ... ON CONFLICT DO UPDATE (pas de doublons)
-    - Mise à jour de la date de collecte à chaque passage
-    """
     logger.info("🟢 [LOAD] Connexion à PostgreSQL...")
     clean = context["ti"].xcom_pull(key="clean_velib", task_ids="transform_velib")
 
@@ -153,25 +142,30 @@ def load_velib(**context):
 
     upsert_sql = """
         INSERT INTO velib_stations (
-            station_id, nom_station,
+            station_id, nom_station, capacite_station, coordonnees_geo,
             nb_velos_disponibles, velos_electriques, velos_mecaniques,
-            nb_bornettes_libres, capacite, statut,
-            latitude, longitude, date_collecte
+            bornes_disponibles, bornes_indisponibles,
+            est_installee, est_retournante,
+            derniere_maj
         ) VALUES (
-            %(station_id)s, %(nom_station)s,
+            %(station_id)s, %(nom_station)s, %(capacite_station)s, %(coordonnees_geo)s,
             %(nb_velos_disponibles)s, %(velos_electriques)s, %(velos_mecaniques)s,
-            %(nb_bornettes_libres)s, %(capacite)s, %(statut)s,
-            %(latitude)s, %(longitude)s, NOW()
+            %(bornes_disponibles)s, %(bornes_indisponibles)s,
+            %(est_installee)s, %(est_retournante)s,
+            NOW()
         )
         ON CONFLICT (station_id) DO UPDATE SET
-            nom_station            = EXCLUDED.nom_station,
-            nb_velos_disponibles   = EXCLUDED.nb_velos_disponibles,
-            velos_electriques      = EXCLUDED.velos_electriques,
-            velos_mecaniques       = EXCLUDED.velos_mecaniques,
-            nb_bornettes_libres    = EXCLUDED.nb_bornettes_libres,
-            capacite               = EXCLUDED.capacite,
-            statut                 = EXCLUDED.statut,
-            date_collecte          = NOW();
+            nom_station           = EXCLUDED.nom_station,
+            capacite_station      = EXCLUDED.capacite_station,
+            coordonnees_geo       = EXCLUDED.coordonnees_geo,
+            nb_velos_disponibles  = EXCLUDED.nb_velos_disponibles,
+            velos_electriques     = EXCLUDED.velos_electriques,
+            velos_mecaniques      = EXCLUDED.velos_mecaniques,
+            bornes_disponibles    = EXCLUDED.bornes_disponibles,
+            bornes_indisponibles  = EXCLUDED.bornes_indisponibles,
+            est_installee         = EXCLUDED.est_installee,
+            est_retournante       = EXCLUDED.est_retournante,
+            derniere_maj          = NOW();
     """
 
     count = 0
@@ -201,21 +195,16 @@ with DAG(
     task_extract = PythonOperator(
         task_id="extract_velib",
         python_callable=extract_velib,
-        provide_context=True,
     )
 
     task_transform = PythonOperator(
         task_id="transform_velib",
         python_callable=transform_velib,
-        provide_context=True,
     )
 
     task_load = PythonOperator(
         task_id="load_velib",
         python_callable=load_velib,
-        provide_context=True,
     )
 
-    # ── Chaîne ETL explicite ──────────────
-    # Extract → Transform → Load
     task_extract >> task_transform >> task_load
